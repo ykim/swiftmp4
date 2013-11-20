@@ -19,12 +19,12 @@ class SwiftMp4Middleware(object):
     def __init__(self, app, conf):
         self.app = app
         self.conf = conf
+        self.first_range = int(conf.get('first_range', '4')) * 1024 * 1024
     
     def make_start_request(self, env):
-        # Request first 4 MB of Object
-        # TODO: Make this a configuration option later
+        # Request first self.first_range (default: 4194304) bytes of Object
         environ = env.copy()
-        environ['HTTP_RANGE'] = 'bytes=0-4194304'
+        environ['HTTP_RANGE'] = 'bytes=0-' + str(self.first_range)
         def start_response(status, headers, *args):
             if not status.startswith('2'):
                 env['swift.start_error'] = True

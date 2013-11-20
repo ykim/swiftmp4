@@ -36,7 +36,9 @@ If you use keystone:
         [pipeline:main]
         pipeline = catch_errors cache swiftmp4 authtoken keystone proxy-server
 
-3) Add to your proxy-server.conf the section for the Swift3 WSGI filter::
+3) Add to your proxy-server.conf the section for the SwiftMp4 WSGI filter::
 
     [filter:swiftmp4]
     use = egg:swiftmp4#swiftmp4
+    # Number of megabytes fetched from Object to get MP4 atoms
+    first_range = 4
