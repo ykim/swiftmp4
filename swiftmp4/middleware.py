@@ -1,4 +1,5 @@
 import urlparse
+import re
 from StringIO import StringIO
 from swiftmp4.streaming.StreamMp4 import SwiftStreamMp4
 
@@ -52,8 +53,8 @@ class SwiftMp4Middleware(object):
     def handle_request(self, env, start_response):
         parts = urlparse.parse_qs(env.get('QUERY_STRING') or '')
         start = parts.get('start', [''])[0]
-        # TODO: Check that the file requested is a MP4
-        if start and env['REQUEST_METHOD'] == 'GET':
+
+        if start and env['REQUEST_METHOD'] == 'GET' and re.search(r'^.+\.mp4(\?.*)?$', env["RAW_PATH_INFO"]):
             # Get the MP4 metadata
             start_resp = self.make_start_request(env)
             start_file = StringIO(''.join(start_resp))
