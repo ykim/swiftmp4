@@ -54,7 +54,7 @@ class SwiftMp4Middleware(object):
         parts = urlparse.parse_qs(env.get('QUERY_STRING') or '')
         start = parts.get('start', [''])[0]
 
-        if start and env['REQUEST_METHOD'] == 'GET' and re.search(r'^.+\.mp4(\?.*)?$', env["RAW_PATH_INFO"]):
+        if start and start != '0' and env['REQUEST_METHOD'] == 'GET' and re.search(r'^.+\.mp4(\?.*)?$', env["RAW_PATH_INFO"]):
             # Get the MP4 metadata
             start_resp = self.make_start_request(env)
             start_file = StringIO(''.join(start_resp))
